@@ -1,17 +1,37 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-jailbreak-detection';
+import { isJailbroken } from 'react-native-jailbreak-detection';
 
 export default function App() {
-  const [result, setResult] = useState<number | undefined>();
+  // State to hold the jailbreak status: true, false, or null (loading)
+  const [jailbroken, setJailbroken] = useState<boolean | null>(null);
+
+  // State to handle any errors during detection
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    multiply(3, 7).then(setResult);
+    // Invoke the jailbreak detection
+    isJailbroken()
+      .then((result) => {
+        setJailbroken(result);
+      })
+      .catch((err) => {
+        console.error('Error detecting jailbreak status:', err);
+        setError('Failed to detect jailbreak status.');
+      });
   }, []);
+
+  // Determine what to display based on the current state
+  let displayText = 'Checking jailbreak status...';
+  if (error) {
+    displayText = error;
+  } else if (jailbroken !== null) {
+    displayText = `Jailbroken: ${jailbroken}`;
+  }
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text style={styles.text}>{displayText}</Text>
     </View>
   );
 }
@@ -21,10 +41,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 16,
+    backgroundColor: '#f0f0f0', // Optional: Add a background color for better visibility
   },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
   },
 });

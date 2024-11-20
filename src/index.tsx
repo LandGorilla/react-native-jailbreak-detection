@@ -17,6 +17,6 @@ const JailbreakDetection = NativeModules.JailbreakDetection
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return JailbreakDetection.multiply(a, b);
+export function isJailbroken(): Promise<boolean> {
+  return JailbreakDetection.isJailbroken();
 }
