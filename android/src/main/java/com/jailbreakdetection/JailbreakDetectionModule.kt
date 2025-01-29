@@ -1,25 +1,25 @@
 package com.jailbreakdetection
 
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.Promise
+import com.scottyab.rootbeer.RootBeer
 
-class JailbreakDetectionModule(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext) {
+class JailbreakDetectionModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
   override fun getName(): String {
-    return NAME
+    return "JailbreakDetection"
   }
 
-  // Example method
-  // See https://reactnative.dev/docs/native-modules-android
   @ReactMethod
-  fun multiply(a: Double, b: Double, promise: Promise) {
-    promise.resolve(a * b)
-  }
-
-  companion object {
-    const val NAME = "JailbreakDetection"
+  fun isJailbroken(promise: Promise) {
+    try {
+      val rootBeer = RootBeer(reactApplicationContext)
+      val isRooted = rootBeer.isRooted
+      promise.resolve(isRooted)
+    } catch (e: Exception) {
+      promise.reject("isJailbrokenError", e.message, e)
+    }
   }
 }

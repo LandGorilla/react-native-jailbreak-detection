@@ -10,7 +10,6 @@ npm install react-native-jailbreak-detection
 
 ## Usage
 
-
 ```js
 import { multiply } from 'react-native-jailbreak-detection';
 
@@ -18,7 +17,6 @@ import { multiply } from 'react-native-jailbreak-detection';
 
 const result = await multiply(3, 7);
 ```
-
 
 ## Contributing
 
